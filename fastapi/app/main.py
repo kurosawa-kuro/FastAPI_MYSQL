@@ -1,18 +1,9 @@
 # -*- encoding: utf-8 -*-
-from typing import Optional
 from fastapi import FastAPI, Depends, Path, HTTPException
 import models
 from fastapi.middleware.cors import CORSMiddleware
 import handle_db
 import datetime
-from pydantic import BaseModel
-
-
-class User(BaseModel):
-    name: str
-    email: str
-    password: str
-
 
 app = FastAPI()
 
@@ -36,7 +27,8 @@ async def FastAPI():
 
 @app.get(path="/api/users")
 async def get_list_user():
-    print('@app.get(path="/api/users")')
+    print("/api/users")
+    pass
     result = handle_db.select_all_user()
     return {
         "status": "OK",
@@ -47,11 +39,8 @@ async def get_list_user():
 
 
 @app.post(path="/api/users")
-async def post_user(user: User):
-    print('@app.post(path="/api/users")')
-    print('name', user.name)
-    # pass
-    result = handle_db.create_user(user.name, user.email, user.password)
+async def post_user(name: str, email: str):
+    result = handle_db.create_user(name, email)
     if result == 1:
         raise HTTPException(status_code=404, detail="Query Error!!")
     return {
@@ -64,7 +53,6 @@ async def post_user(user: User):
 
 @app.get(path="/api/users/{user_id}")
 async def get_user(user_id: str):
-    print('@app.get(path="/api/users/{user_id}")')
     result = handle_db.select_user(user_id)
     if result == 1:
         raise HTTPException(status_code=404, detail="Query Error!!")
@@ -78,7 +66,6 @@ async def get_user(user_id: str):
 
 @app.put(path="/api/users/{user_id}")
 async def put_user(user_id: str, name: str, email: str, user_status: str):
-    print('@app.get(path="/api/users/{user_id}")')
     result = handle_db.update_user(user_id, name, email, user_status)
     if result == 1:
         raise HTTPException(status_code=404, detail="Query Error!!")

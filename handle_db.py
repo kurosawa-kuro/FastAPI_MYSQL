@@ -2,6 +2,7 @@
 import sys
 import models
 import databases
+import datetime
 
 sys.dont_write_bytecode = True
 
@@ -15,12 +16,16 @@ def select_all_user():
     return user_list
 
 
-def create_user(user_name, user_mail):
+def create_user(name, email, password):
     session = databases.create_new_session()
     user = models.user()
-    user.name = user_name
-    user.mail_address = user_mail
-    user.status = 'created'
+    # user.id = 5
+    user.name = name
+    user.email = email
+    user.password = password
+    user.createdAt = str(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+    user.updatedAt = str(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+
     session.add(user)
     session.commit()
     return 0
@@ -36,15 +41,15 @@ def select_user(user_id):
     return user
 
 
-def update_user(user_id, user_name, user_mail, user_status):
+def update_user(user_id, name, email, user_status):
     session = databases.create_new_session()
     user = session.query(models.user).\
         filter(models.user.id == user_id).\
         first()
     if user == None:
         return 1
-    user.name = user_name
-    user.mail_address = user_mail
+    user.name = name
+    user.mail_address = email
     user.status = user_status
     session.commit()
     return 0
