@@ -19,7 +19,7 @@ def select_all_user():
 def create_user(name, email, password):
     session = databases.create_new_session()
     user = models.user()
-    # user.id = 5
+
     user.name = name
     user.email = email
     user.password = password
@@ -28,6 +28,7 @@ def create_user(name, email, password):
 
     session.add(user)
     session.commit()
+
     return 0
 
 

@@ -48,9 +48,6 @@ async def get_list_user():
 
 @app.post(path="/api/users")
 async def post_user(user: User):
-    print('@app.post(path="/api/users")')
-    print('name', user.name)
-    # pass
     result = handle_db.create_user(user.name, user.email, user.password)
     if result == 1:
         raise HTTPException(status_code=404, detail="Query Error!!")
